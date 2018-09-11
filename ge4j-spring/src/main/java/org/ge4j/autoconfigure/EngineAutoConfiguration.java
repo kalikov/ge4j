@@ -12,14 +12,4 @@ import org.springframework.context.annotation.FilterType;
         includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = EngineConfiguration.class)
 )
 public class EngineAutoConfiguration {
-    @Bean
-    public Object s() {
-        return "s";
-    }
-
-//    @Bean
-//    public BeanDefinitionRegistryPostProcessor beanDefinitionRegistryPostProcessor() {
-//        return new MyBeanDefinitionRegistryPostProcessor();
-//    }
-
 }

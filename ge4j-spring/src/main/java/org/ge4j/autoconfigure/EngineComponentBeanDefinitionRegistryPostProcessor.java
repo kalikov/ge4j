@@ -25,24 +25,33 @@ public class EngineComponentBeanDefinitionRegistryPostProcessor implements BeanD
             BeanDefinition beanDefinition = beanDefinitionRegistry.getBeanDefinition(name);
             String beanClassName = beanDefinition.getBeanClassName();
             if (beanClassName != null) {
-                try {
-                    Class<?> beanClass = Class.forName(beanClassName);
-                    if (EngineConfiguration.class.isAssignableFrom(beanClass)) {
-                        ReflectionUtils.doWithLocalMethods(beanClass, method -> {
-                            if (method.isAnnotationPresent(EngineComponent.class)) {
-                                GenericBeanDefinition componentDefinition = new GenericBeanDefinition();
-                                componentDefinition.setAutowireCandidate(true);
-                                componentDefinition.setParentName(name);
-                                componentDefinition.setFactoryBeanName(name);
-                                componentDefinition.setFactoryMethodName(method.getName());
-                                beanDefinitionRegistry.registerBeanDefinition(method.getName(), componentDefinition);
-                            }
-                        });
-                    }
-                } catch (ClassNotFoundException e) {
-                    logger.warn("Failed to post process bean \"" + name + "\"", e);
-                }
+                postProcessBean(beanDefinitionRegistry, name, beanClassName);
             }
         }
+    }
+
+    private void postProcessBean(BeanDefinitionRegistry beanDefinitionRegistry, String name, String beanClassName) {
+        try {
+            Class<?> beanClass = Class.forName(beanClassName);
+            postProcessBean(beanDefinitionRegistry, name, beanClass);
+        } catch (ClassNotFoundException e) {
+            logger.warn("Failed to post process bean \"" + name + "\"", e);
+        }
+    }
+
+    private void postProcessBean(BeanDefinitionRegistry beanDefinitionRegistry, String name, Class<?> beanClass) {
+        if (!EngineConfiguration.class.isAssignableFrom(beanClass)) {
+            return;
+        }
+        ReflectionUtils.doWithLocalMethods(beanClass, method -> {
+            if (method.isAnnotationPresent(EngineComponent.class)) {
+                GenericBeanDefinition componentDefinition = new GenericBeanDefinition();
+                componentDefinition.setAutowireCandidate(true);
+                componentDefinition.setParentName(name);
+                componentDefinition.setFactoryBeanName(name);
+                componentDefinition.setFactoryMethodName(method.getName());
+                beanDefinitionRegistry.registerBeanDefinition(method.getName(), componentDefinition);
+            }
+        });
     }
 }

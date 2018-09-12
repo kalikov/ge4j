@@ -1,7 +1,6 @@
 package org.ge4j.autoconfigure;
 
-import org.ge4j.EngineConfiguration;
-import org.springframework.context.annotation.Bean;
+import org.ge4j.EngineComponent;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
@@ -9,7 +8,7 @@ import org.springframework.context.annotation.FilterType;
 @Configuration
 @ComponentScan(
         basePackages = "org.ge4j",
-        includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = EngineConfiguration.class)
+        includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = EngineComponent.class)
 )
 public class EngineAutoConfiguration {
 }

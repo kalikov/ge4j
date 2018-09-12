@@ -13,13 +13,10 @@ public class FrameCounter {
         this.time = millisProvider.getMillis();
     }
 
-    public FrameCounter(MillisProvider millisProvider, long time) {
-        long currentMillis = millisProvider.getMillis();
-        if (time > currentMillis) {
-            throw new IllegalArgumentException(String.format("Argument time %d is ahead of clock time %d", time, currentMillis));
-        }
-        this.millisProvider = millisProvider;
-        this.time = time;
+    public void reset() {
+        time = millisProvider.getMillis();
+        frame = 0;
+        frameRate = 0;
     }
 
     public void increment() {
@@ -34,6 +31,6 @@ public class FrameCounter {
     }
 
     public int getFrameRate() {
-        return frameRate;
+        return frameRate == 0 ? frame : frameRate;
     }
 }

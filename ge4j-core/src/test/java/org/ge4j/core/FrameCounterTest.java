@@ -13,11 +13,6 @@ public class FrameCounterTest {
         Assert.assertEquals(counter.getFrameRate(), 0);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void shouldThrowOnInvalidTimeArgument() {
-        new FrameCounter(() -> 1000, 2000);
-    }
-
     @Test(dataProvider = "millisWithRates")
     public void shouldCountMultipleFrames(long[] millis, int[] rates) {
         FrameCounter counter = new FrameCounter(new ArrayMillisProvider(millis));

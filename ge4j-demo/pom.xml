@@ -29,13 +29,14 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.ge4j</groupId>
+            <artifactId>ge4j-awt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
         </dependency>
     </dependencies>
 

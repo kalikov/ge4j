@@ -2,9 +2,12 @@ package org.ge4j.core;
 
 import org.ge4j.Engine;
 import org.ge4j.EngineComponent;
+import org.ge4j.Event;
+import org.ge4j.ExecutableEvent;
 import org.ge4j.MainFunction;
 import org.ge4j.Managed;
 import org.ge4j.MillisProvider;
+import org.ge4j.MultiDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +17,9 @@ import java.util.Date;
 
 class EngineImpl implements Engine, EngineComponent {
     private static final Logger logger = LoggerFactory.getLogger(EngineImpl.class);
+
+    private final ExecutableEvent<Runnable> engineStarted = new MultiDelegate<>();
+    private final ExecutableEvent<Runnable> engineStopped = new MultiDelegate<>();
 
     private final MillisProvider millisProvider;
     private final FrameCounter frameCounter;
@@ -34,6 +40,16 @@ class EngineImpl implements Engine, EngineComponent {
         this.frameCounter = new FrameCounter(millisProvider);
     }
 
+    @Override
+    public Event<Runnable> engineStarted() {
+        return engineStarted;
+    }
+
+    @Override
+    public Event<Runnable> engineStopped() {
+        return engineStopped;
+    }
+
     public void run() {
         logger.info("Engine started");
 
@@ -47,15 +63,22 @@ class EngineImpl implements Engine, EngineComponent {
         logger.info("Memory: {}K total, {}K free", totalMemory / 1024L, freeMemory / 1024L);
 
         isActive = true;
+        engineStarted.execute(Runnable::run);
         try {
             mainLoop();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
             isActive = false;
+            engineStopped.execute(Runnable::run);
         }
 
         logger.info("Engine stopped");
+    }
+
+    @Override
+    public void stop() {
+        quit = true;
     }
 
     private void mainLoop() throws InterruptedException {

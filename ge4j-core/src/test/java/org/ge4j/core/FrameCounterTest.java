@@ -27,9 +27,9 @@ public class FrameCounterTest {
     public static Object[][] millisWithRates() {
         return new Object[][] {
                 {new long[] {0, 1001}, new int[] {0, 0}},
-                {new long[] {0, 1000, 1001}, new int[] {0, 0, 1}},
-                {new long[] {0, 1, 1, 1, 1001}, new int[] {0, 0, 0, 0, 3}},
-                {new long[] {0, 1, 1, 1, 1001, 1500, 10000, 10001, 10002, 100000}, new int[] {0, 0, 0, 0, 3, 3, 1, 1, 1, 2}}
+                {new long[] {0, 1000, 1001}, new int[] {0, 1, 1}},
+                {new long[] {0, 1, 1, 1, 1001}, new int[] {0, 1, 2, 3, 3}},
+                {new long[] {0, 1, 1, 1, 1001, 1500, 10000, 10001, 10002, 100000}, new int[] {0, 1, 2, 3, 3, 3, 1, 1, 1, 2}}
         };
     }
 

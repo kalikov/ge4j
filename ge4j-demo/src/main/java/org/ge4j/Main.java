@@ -5,9 +5,9 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class Main {
     public static void main(String[] args) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(EngineAutoConfiguration.class);
-
-        Engine engine = context.getBean(Engine.class);
-        engine.run();
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(EngineAutoConfiguration.class)) {
+            Engine engine = context.getBean(Engine.class);
+            engine.run();
+        }
     }
 }

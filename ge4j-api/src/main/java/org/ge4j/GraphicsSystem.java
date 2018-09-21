@@ -13,9 +13,11 @@ public interface GraphicsSystem extends EngineComponent {
 
     void setHeight(int height);
 
-    void setDimensions(int width, int height);
+    void setWindowed(int width, int height);
 
     boolean isFullscreen();
 
     void setFullscreen(boolean isFullscreen);
+
+    RenderTarget getScreen();
 }

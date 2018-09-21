@@ -5,6 +5,8 @@ public interface Engine {
 
     Event<Runnable> engineStopped();
 
+    Event<MainFunction> engineCycle();
+
     void run();
 
     void stop();

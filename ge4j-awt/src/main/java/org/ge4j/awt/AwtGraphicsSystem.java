@@ -3,10 +3,13 @@ package org.ge4j.awt;
 import org.ge4j.Engine;
 import org.ge4j.GraphicsSystem;
 import org.ge4j.Managed;
+import org.ge4j.RenderTarget;
 
 public class AwtGraphicsSystem implements GraphicsSystem {
     private final Engine engine;
     private AwtWindow window;
+    private AwtScreen screen;
+
     private String title = "Game Engine";
     private int width = 640;
     private int height = 480;
@@ -27,9 +30,15 @@ public class AwtGraphicsSystem implements GraphicsSystem {
     private void onEngineStarted() {
         window = new AwtWindow(title, width, height, isFullscreen);
         window.setCloseHandler(engine::stop);
+
+        screen = new AwtScreen(window);
     }
 
     private void onEngineStopped() {
+        if (screen != null) {
+            screen.dispose();
+            screen = null;
+        }
         if (window != null) {
             window.dispose();
             window = null;
@@ -72,7 +81,7 @@ public class AwtGraphicsSystem implements GraphicsSystem {
     }
 
     @Override
-    public void setDimensions(int width, int height) {
+    public void setWindowed(int width, int height) {
         this.width = width;
         this.height = height;
         adjustWindow();
@@ -87,6 +96,11 @@ public class AwtGraphicsSystem implements GraphicsSystem {
     public void setFullscreen(boolean isFullscreen) {
         this.isFullscreen = isFullscreen;
         adjustWindow();
+    }
+
+    @Override
+    public RenderTarget getScreen() {
+        return screen;
     }
 
     private void adjustWindow() {
